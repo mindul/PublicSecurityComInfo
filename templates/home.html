@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>금융회사<br>목록</h2>
+        </div>
+        <ul class="company-list">
+            {% for company in companies %}
+            <li class="company-item" data-id="{{ company.publish_no }}">
+                <span class="company-name">{{ company.name }}</span>
+                <!-- <span class="chevron">›</span> -->
+            </li>
+            {% endfor %}
+        </ul>
+    </aside>
+    
+    <main class="main-content">
+        <div id="detail-view" class="detail-placeholder">
+            <div class="placeholder-text">
+                <h3>회사를 선택하세요</h3>
+                <p>왼쪽 목록에서 금융회사를 선택하여<br>정보보호 현황을 확인하세요.</p>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $('.company-item').click(function() {
+            // Remove active class from all items
+            $('.company-item').removeClass('active');
+            // Add active class to clicked item
+            $(this).addClass('active');
+
+            var publishNo = $(this).data('id');
+            var detailView = $('#detail-view');
+
+            // Show loading state
+            detailView.html('<div class="loading">데이터 불러오는 중...</div>');
+
+            $.ajax({
+                url: '/api/company/' + publishNo,
+                method: 'GET',
+                success: function(response) {
+                    if (response.error) {
+                        detailView.html('<div class="error">' + response.error + '</div>');
+                    } else {
+                        var html = `
+                            <div class="company-detail animated fadeIn">
+                                <h1 class="detail-title">${response.name}</h1>
+                                <div class="detail-section">
+                                    <h2>정보보호 공시 현황</h2>
+                                    <div class="table-responsive">
+                                        ${response.table_html}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        detailView.html(html);
+                    }
+                },
+                error: function() {
+                    detailView.html('<div class="error">데이터 로드 실패. 다시 시도해주세요.</div>');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
