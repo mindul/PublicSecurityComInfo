@@ -4,18 +4,24 @@
 <div class="dashboard-container">
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h2>금융회사<br>목록</h2>
+            <h2>금융회사 목록</h2>
         </div>
         <ul class="company-list">
             {% for company in companies %}
             <li class="company-item" data-id="{{ company.publish_no }}">
-                <span class="company-name">{{ company.name }}</span>
+                <span class="company-name">{{ loop.index }}. {{ company.name }}</span>
                 <!-- <span class="chevron">›</span> -->
             </li>
             {% endfor %}
         </ul>
+        <div class="sidebar-footer">
+            <a href="https://isds.kisa.or.kr/kr/publish/list.do?menuNo=204942&pageIndex=1&listFlag=list&searchWrd=%EA%B8%88%EC%9C%B5+%EB%B0%8F+%EB%B3%B4%ED%97%98%EC%97%85&searchPublishYear=2025"
+                target="_blank">
+                [출처] 정보보호 공시 종합 포털
+            </a>
+        </div>
     </aside>
-    
+
     <main class="main-content">
         <div id="detail-view" class="detail-placeholder">
             <div class="placeholder-text">
@@ -29,8 +35,8 @@
 
 {% block scripts %}
 <script>
-    $(document).ready(function() {
-        $('.company-item').click(function() {
+    $(document).ready(function () {
+        $('.company-item').click(function () {
             // Remove active class from all items
             $('.company-item').removeClass('active');
             // Add active class to clicked item
@@ -39,16 +45,20 @@
             var publishNo = $(this).data('id');
             var detailView = $('#detail-view');
 
+            // Reset view class for loading/error centering
+            detailView.addClass('detail-placeholder');
+
             // Show loading state
             detailView.html('<div class="loading">데이터 불러오는 중...</div>');
 
             $.ajax({
                 url: '/api/company/' + publishNo,
                 method: 'GET',
-                success: function(response) {
+                success: function (response) {
                     if (response.error) {
                         detailView.html('<div class="error">' + response.error + '</div>');
                     } else {
+                        detailView.removeClass('detail-placeholder');
                         var html = `
                             <div class="company-detail animated fadeIn">
                                 <h1 class="detail-title">${response.name}</h1>
@@ -63,7 +73,7 @@
                         detailView.html(html);
                     }
                 },
-                error: function() {
+                error: function () {
                     detailView.html('<div class="error">데이터 로드 실패. 다시 시도해주세요.</div>');
                 }
             });

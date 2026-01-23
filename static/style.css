@@ -9,13 +9,20 @@
     --font-heading: 'Playfair Display', serif;
 }
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
     font-family: var(--font-primary);
     background-color: var(--bg-color);
     color: var(--text-color);
-    overflow: hidden; /* Prevent body scroll, handle in containers */
+    overflow: hidden;
+    /* Prevent body scroll, handle in containers */
 }
 
 /* Landing Page */
@@ -24,33 +31,59 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: radial-gradient(circle at top right, #1e293b, #0f172a);
+    /* background moved to ::before for blur effect */
     text-align: center;
     position: relative;
     overflow: hidden;
 }
 
+.landing-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/static/landing_bg.png') no-repeat center center/cover;
+    filter: blur(8px);
+    /* Blur the background */
+    transform: scale(1.1);
+    /* Scale slightly to hide blurred edges */
+    z-index: 1;
+}
+
 .landing-content {
     z-index: 2;
+    position: relative;
+    /* Ensure z-index works */
     animation: fadeInUp 1s ease-out;
 }
 
 .landing-title {
-    font-family: var(--font-heading);
-    font-size: 5rem;
+    font-family: var(--font-primary);
+    /* Thicker sans-serif */
+    font-size: 3.5rem;
+    /* Increased from 2.5rem */
+    font-weight: 900;
+    /* Extra bold */
     margin-bottom: 1rem;
     line-height: 1.1;
-    background: -webkit-linear-gradient(45deg, #38bdf8, #a855f7);
-    -webkit-background-clip: text;
-    background-clip: text; /* Standard property */
-    -webkit-text-fill-color: transparent;
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: initial;
+    color: #ffffff;
+    /* All white text */
 }
 
 .landing-subtitle {
-    font-size: 1.5rem;
-    color: #94a3b8;
+    font-size: 2.0rem;
+    /* Increased size */
+    color: #ffffff;
+    /* White text */
     margin-bottom: 3rem;
-    font-weight: 300;
+    font-weight: 700;
+    /* Bold */
 }
 
 .btn-primary {
@@ -77,7 +110,10 @@ body {
 }
 
 .sidebar {
-    width: 300px;
+    width: 270px;
+    /* Reduced by another 20% (approx 270px) */
+    flex-shrink: 0;
+    /* Prevent shrinking/growing */
     background-color: var(--sidebar-bg);
     border-right: 1px solid #334155;
     display: flex;
@@ -85,13 +121,18 @@ body {
 }
 
 .sidebar-header {
-    padding: 2rem;
+    padding: 1rem;
+    /* Reduced from 2rem to reduce height */
     border-bottom: 1px solid #334155;
     background: linear-gradient(to bottom, #1e293b, #0f172a);
+    text-align: center;
+    /* Center align header */
 }
 
 .sidebar-header h2 {
-    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-family: var(--font-primary);
+    font-weight: 700;
     margin: 0;
     background: -webkit-linear-gradient(45deg, #fff, #94a3b8);
     -webkit-background-clip: text;
@@ -99,27 +140,12 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
-.company-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    overflow-y: auto;
-    flex-grow: 1;
-}
+/* ... (skip to company-item rule) */
 
-.company-item {
-    padding: 1.2rem 2rem;
-    border-bottom: 1px solid #334155;
-    cursor: pointer;
-    transition: background-color 0.2s, padding-left 0.2s;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.company-item:hover, .company-item.active {
+.company-item:hover,
+.company-item.active {
     background-color: var(--hover-color);
-    padding-left: 2.2rem;
+    /* padding-left removed to prevent jitter */
     color: var(--accent-color);
 }
 
@@ -128,8 +154,35 @@ body {
     transition: opacity 0.2s;
 }
 
-.company-item:hover .chevron, .company-item.active .chevron {
+.company-item:hover .chevron,
+.company-item.active .chevron {
     opacity: 1;
+}
+
+.sidebar-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #334155;
+    background-color: var(--sidebar-bg);
+    text-align: center;
+    font-size: 1.0rem;
+    /* Increased from 0.8rem */
+}
+
+.sidebar-footer a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s;
+    display: inline-block;
+    /* Ensure proper centering behavior if needed */
+}
+
+.sidebar-footer a:visited {
+    color: yellow;
+}
+
+.sidebar-footer a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
 }
 
 /* Main Content */
@@ -137,7 +190,8 @@ body {
     flex-grow: 1;
     padding: 3rem;
     overflow-y: auto;
-    background-color: #000000; /* Pure Black as requested */
+    background-color: #000000;
+    /* Pure Black as requested */
 }
 
 .detail-placeholder {
@@ -151,13 +205,15 @@ body {
 
 .company-detail {
     width: 90%;
-    max-width: 1600px; /* Limit very wide screens */
+    max-width: 1600px;
+    /* Limit very wide screens */
     margin: 0 auto;
     animation: fadeIn 0.5s ease-out;
 }
 
 .detail-title {
-    font-family: var(--font-primary); /* Modern sans-serif */
+    font-family: var(--font-primary);
+    /* Modern sans-serif */
     font-size: 2.5rem;
     margin-bottom: 3rem;
     color: #ffffff;
@@ -196,22 +252,29 @@ table {
     font-size: 1rem;
     color: #e2e8f0;
     background-color: transparent;
-    table-layout: fixed; /* Access to fixed column widths */
+    table-layout: fixed;
+    /* Access to fixed column widths */
 }
 
 /* Enforce equal width for all cell columns (assuming 3 columns as requested) */
-th, td {
+th,
+td {
     padding: 1.2rem 1rem;
-    text-align: center; /* Center align looks better for equal columns usually, or keep left */
-    border-bottom: 1px solid #333;
+    text-align: center;
+    /* Center align looks better for equal columns usually, or keep left */
+    border: 1px solid #333;
+    /* Show all borders */
     vertical-align: middle;
-    width: 33.33%; /* Force 3 columns to be equal */
-    word-break: break-word; /* Ensure long content doesn't break layout */
+    width: 33.33%;
+    /* Force 3 columns to be equal */
+    word-break: break-word;
+    /* Ensure long content doesn't break layout */
 }
 
 /* Header (if present) */
 th {
-    border-bottom: 2px solid #555;
+    border: 1px solid #555;
+    /* Show all borders for header too */
     color: #fff;
     font-weight: 700;
 }
@@ -220,7 +283,8 @@ th {
 td:first-child {
     font-weight: 600;
     color: #cbd5e1;
-    padding-left: 1rem; /* Restore padding */
+    padding-left: 1rem;
+    /* Restore padding */
 }
 
 td:nth-child(2) {
@@ -229,7 +293,8 @@ td:nth-child(2) {
 }
 
 tr:hover td {
-    background-color: rgba(255, 255, 255, 0.03); /* Subtle hover */
+    background-color: rgba(255, 255, 255, 0.03);
+    /* Subtle hover */
 }
 
 /* Loading & Error */
@@ -245,11 +310,18 @@ tr:hover td {
 
 /* Animations */
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .fadeIn {
-   animation-name: fadeInUp;
-   animation-fill-mode: both;
+    animation-name: fadeInUp;
+    animation-fill-mode: both;
 }
