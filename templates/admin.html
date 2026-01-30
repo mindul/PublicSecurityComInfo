@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="main-content" style="background-color: #f5f7fa; color: #333;">
+        <div class="admin-panel" style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+            <h1 style="color: #333; margin-bottom: 2rem;">관리자 대시보드</h1>
+
+            <div class="card"
+                style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h2 style="margin-top: 0;">가입 승인 대기 목록</h2>
+
+                {% if users %}
+                <table style="width: 100%; margin-top: 1rem; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #eee;">
+                            <th style="text-align: left; padding: 1rem; color: #666;">ID</th>
+                            <th style="text-align: left; padding: 1rem; color: #666;">사용자명</th>
+                            <th style="padding: 1rem; color: #666;">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 1rem; color: #333;">{{ user.id }}</td>
+                            <td style="padding: 1rem; color: #333;">{{ user.username }}</td>
+                            <td style="padding: 1rem; text-align: center;">
+                                <a href="{{ url_for('approve_user', user_id=user.id) }}"
+                                    style="display: inline-block; padding: 0.5rem 1rem; background-color: #10b981; color: white; text-decoration: none; border-radius: 5px; margin-right: 0.5rem;">
+                                    승인
+                                </a>
+                                <a href="{{ url_for('reject_user', user_id=user.id) }}"
+                                    style="display: inline-block; padding: 0.5rem 1rem; background-color: #ef4444; color: white; text-decoration: none; border-radius: 5px;">
+                                    거절
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p style="padding: 2rem; text-align: center; color: #666;">
+                    승인 대기 중인 회원이 없습니다.
+                </p>
+                {% endif %}
+            </div>
+
+            <div style="margin-top: 2rem; text-align: right;">
+                <a href="{{ url_for('logout') }}" style="color: #ef4444; text-decoration: none;">로그아웃</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

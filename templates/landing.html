@@ -5,7 +5,11 @@
     <div class="landing-content">
         <h1 class="landing-title">금융회사 정보보호 공시 현황</h1>
         <p class="landing-subtitle">한국인터넷진흥원(KISA) 제공</p>
-        <a href="{{ url_for('home') }}" class="btn-primary">시작하기</a>
+
+        <div class="landing-buttons">
+            <a href="{{ url_for('login') }}" class="btn-secondary">로그인</a>
+            <a href="{{ url_for('register') }}" class="btn-primary">회원가입</a>
+        </div>
     </div>
     <div class="landing-overlay"></div>
 </div>
